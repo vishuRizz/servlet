@@ -17,6 +17,7 @@ public class EmbeddedJettyApp {
         context.addServlet(new ServletHolder(new RegistrationServlet()), "/register");
         context.addServlet(new ServletHolder(new MessageWithDateServlet()), "/message");
         context.addServlet(new ServletHolder(new RandomNumberServlet()), "/random");
+        context.addServlet(new ServletHolder(new JSPRegistrationServlet()), "/submitRegistration");
 
         server.start();
         System.out.println("Server started at:");
