@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/register")
 public class RegistrationServlet extends HttpServlet {
@@ -17,8 +16,7 @@ public class RegistrationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.setContentType("text/html; charset=UTF-8");
-        try (PrintWriter out = resp.getWriter()) {
-            out.println("""
+        resp.getWriter().println("""
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -37,40 +35,22 @@ public class RegistrationServlet extends HttpServlet {
                 </body>
                 </html>
                 """);
-        }
     }
 
-    // Process the submitted form data
+    // Process submitted data and forward to success.jsp
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // Read parameters from the request
         String firstName = req.getParameter("firstName");
         String lastName  = req.getParameter("lastName");
         String email     = req.getParameter("email");
-        String password  = req.getParameter("password");
 
-        // (In a real app you'd validate & store these in a database)
+        // Set attributes to pass to JSP
+        req.setAttribute("firstName", firstName);
+        req.setAttribute("lastName", lastName);
+        req.setAttribute("email", email);
 
-        resp.setContentType("text/html; charset=UTF-8");
-        try (PrintWriter out = resp.getWriter()) {
-            out.println("""
-                <!DOCTYPE html>
-                <html>
-                <head>
-                  <meta charset="UTF-8">
-                  <title>Registration Result</title>
-                </head>
-                <body>
-                  <h2>Registration Successful</h2>
-                """);
-            out.printf("<p>Name: %s %s</p>%n", firstName, lastName);
-            out.printf("<p>Email: %s</p>%n", email);
-            out.println("""
-                  <p><a href="register">Back to form</a></p>
-                </body>
-                </html>
-                """);
-        }
+        // Forward to success.jsp
+        req.getRequestDispatcher("/success.jsp").forward(req, resp);
     }
 }

@@ -6,20 +6,24 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class EmbeddedJettyApp {
     public static void main(String[] args) throws Exception {
-        // Create a Jetty server on port 8080
         Server server = new Server(8080);
 
-        // Set up a servlet context handler
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
 
-        // Map the RegistrationServlet to the /register URL
+        // Register all servlets
+        context.addServlet(new ServletHolder(new HelloServlet()), "/");
         context.addServlet(new ServletHolder(new RegistrationServlet()), "/register");
+        context.addServlet(new ServletHolder(new MessageWithDateServlet()), "/message");
+        context.addServlet(new ServletHolder(new RandomNumberServlet()), "/random");
 
-        // Start the server
         server.start();
-        System.out.println("Server started on http://localhost:8080/register");
+        System.out.println("Server started at:");
+        System.out.println("  http://localhost:8080/");
+        System.out.println("  http://localhost:8080/register");
+        System.out.println("  http://localhost:8080/message");
+        System.out.println("  http://localhost:8080/random");
         server.join();
     }
 }
